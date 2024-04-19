@@ -11,6 +11,5 @@ create table user (
                       email varchar(255),
                       role varchar(255)
 );
-set @password = 'richard123';
-set @hashed_password = sha2(@password, 256);
-insert into user (username, password, name, phone, email, role) values ('richard', @hashed_password, 'Richard', '0966382597', 'hung.ngo3@sotatek.com', 'ADMIN')
+
+insert into user (username, password, name, phone, email, role) values ('richard', '$2y$10$GqTRSI3vBr6o1QXS8nlJTOfCFZN6dCBuf98mJwIDy/yvp5JnCdNSu', 'Richard', '0966382597', 'hung.ngo3@sotatek.com', 'ADMIN')
