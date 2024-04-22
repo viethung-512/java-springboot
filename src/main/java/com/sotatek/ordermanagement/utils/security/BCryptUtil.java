@@ -1,5 +1,6 @@
 package com.sotatek.ordermanagement.utils.security;
 
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -14,7 +15,8 @@ public class BCryptUtil {
         return encoder.encode(password);
     }
 
-    public static boolean isPasswordMatched(@NonNull final String password, @NonNull final String hashedPassword) {
+    public static boolean isPasswordMatched(
+            @NonNull final String password, @NonNull final String hashedPassword) {
         return encoder.matches(password, hashedPassword);
     }
 }

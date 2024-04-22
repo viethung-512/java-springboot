@@ -1,6 +1,7 @@
 package com.sotatek.ordermanagement.utils.jwt;
 
-import javax.naming.AuthenticationException;
+
+import org.springframework.security.core.AuthenticationException;
 
 public class InvalidJwtError extends AuthenticationException {
     public InvalidJwtError() {
