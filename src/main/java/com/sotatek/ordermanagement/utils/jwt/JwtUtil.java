@@ -70,7 +70,7 @@ public class JwtUtil {
                 .setIssuedAt(Date.from(issuedAt.toInstant()))
                 .setIssuer(issuer)
                 .setExpiration(Date.from(expiration.toInstant()))
-                .signWith(SignatureAlgorithm.RS256, JWT_SECRET)
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }
 }

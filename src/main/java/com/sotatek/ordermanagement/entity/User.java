@@ -45,5 +45,5 @@ public class User {
     private String email;
 
     @Column(name = "role")
-    private UserRole role;
+    private String role;
 }
