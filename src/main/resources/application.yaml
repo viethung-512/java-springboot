@@ -8,4 +8,6 @@ server:
   servlet:
     context-path: /api/v1
 
-
+jwt:
+  private-key: ""
+  public-key: ""

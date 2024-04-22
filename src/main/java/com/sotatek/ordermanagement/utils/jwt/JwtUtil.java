@@ -46,12 +46,12 @@ public class JwtUtil {
     }
 
     @NonNull
-    public static PublicKey extractRSAPrivateKey(@NonNull final String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static PrivateKey extractRSAPrivateKey(@NonNull final String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         final String extractedPrivateKey = extractPrivateKey(privateKey);
         final X509EncodedKeySpec encodedKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(extractedPrivateKey));
         final KeyFactory keyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
 
-        return keyFactory.generatePublic(encodedKeySpec);
+        return keyFactory.generatePrivate(encodedKeySpec);
     }
 
     @NonNull
