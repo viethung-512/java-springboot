@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +73,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private boolean isBearerToken(@Nullable final String authHeader) {
         return StringUtils.isNotEmpty(authHeader)
                 && StringUtils.startsWithIgnoreCase(authHeader, BEARER_PREFIX);
+    }
+
+    private boolean isPublicRoute(final HttpServletRequest request) {
+        return false;
     }
 
     @NonNull

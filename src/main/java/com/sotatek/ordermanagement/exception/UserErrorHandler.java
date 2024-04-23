@@ -1,26 +1,36 @@
 package com.sotatek.ordermanagement.exception;
 
-import com.sotatek.ordermanagement.exception.dto.UserNameExistsErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.naming.AuthenticationException;
+import java.time.LocalDateTime;
+
 @RestControllerAdvice
 public class UserErrorHandler {
     @ExceptionHandler(PasswordNotMatchedException.class)
-    public ResponseEntity<UserNameExistsErrorResponse> handlePasswordNotMatchedError(PasswordNotMatchedException err) {
-        final UserNameExistsErrorResponse response = new UserNameExistsErrorResponse(err.getUsername());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponse> handlePasswordNotMatchedError(PasswordNotMatchedException ex) {
+        ErrorCode error = ErrorCode.PASSWORD_NOT_MATCHED;
+        return new ResponseEntity<>(new ErrorResponse(error.getErrorCode(), error.getErrorMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserNameExistsException.class)
-    public ResponseEntity<UserNameExistsException> handleUsernameExistsError(UserNameExistsException err) {
-        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponse> handleUsernameExistsError(UserNameExistsException ex) {
+        ErrorCode error = ErrorCode.USERNAME_EXISTS;
+        return new ResponseEntity<>(new ErrorResponse(error.getErrorCode(), error.getErrorMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<UserNotFoundException> handleUserNotFoundError(UserNotFoundException err) {
-        return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorResponse> handleUserNotFoundError(UserNotFoundException ex) {
+        ErrorCode error = ErrorCode.USER_NOT_FOUND;
+        return new ResponseEntity<>(new ErrorResponse(error.getErrorCode(), error.getErrorMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationError(AuthenticationException ex) {
+        ErrorCode error = ErrorCode.AUTHENTICATION_ERROR;
+        return new ResponseEntity<>(new ErrorResponse(error.getErrorCode(), error.getErrorMessage()), HttpStatus.UNAUTHORIZED);
     }
 }
