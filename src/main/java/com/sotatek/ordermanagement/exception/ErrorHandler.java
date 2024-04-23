@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.naming.AuthenticationException;
-import java.time.LocalDateTime;
 
 @RestControllerAdvice
-public class UserErrorHandler {
+public class ErrorHandler {
     @ExceptionHandler(PasswordNotMatchedException.class)
     public ResponseEntity<ErrorResponse> handlePasswordNotMatchedError(PasswordNotMatchedException ex) {
         ErrorCode error = ErrorCode.PASSWORD_NOT_MATCHED;
@@ -22,8 +21,8 @@ public class UserErrorHandler {
         return new ResponseEntity<>(new ErrorResponse(error.getErrorCode(), error.getErrorMessage()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFoundError(UserNotFoundException ex) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundError(NotFoundException ex) {
         ErrorCode error = ErrorCode.USER_NOT_FOUND;
         return new ResponseEntity<>(new ErrorResponse(error.getErrorCode(), error.getErrorMessage()), HttpStatus.BAD_REQUEST);
     }
@@ -32,5 +31,17 @@ public class UserErrorHandler {
     public ResponseEntity<ErrorResponse> handleAuthenticationError(AuthenticationException ex) {
         ErrorCode error = ErrorCode.AUTHENTICATION_ERROR;
         return new ResponseEntity<>(new ErrorResponse(error.getErrorCode(), error.getErrorMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(CustomerPhoneExistsException.class)
+    public ResponseEntity<ErrorResponse> handleCustomerPhoneExistsError(CustomerPhoneExistsException ex) {
+        ErrorCode error = ErrorCode.CUSTOMER_PHONE_EXISTS;
+        return new ResponseEntity<>(new ErrorResponse(error.getErrorCode(), error.getErrorMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProductNameExistsException.class)
+    public ResponseEntity<ErrorResponse> handleProductNameExistsException(ProductNameExistsException ex) {
+        ErrorCode error = ErrorCode.PRODUCT_NAME_EXISTS;
+        return new ResponseEntity<>(new ErrorResponse(error.getErrorCode(), error.getErrorMessage()), HttpStatus.BAD_REQUEST);
     }
 }
