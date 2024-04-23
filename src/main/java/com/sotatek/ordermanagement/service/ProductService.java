@@ -1,5 +1,6 @@
 package com.sotatek.ordermanagement.service;
 
+
 import com.sotatek.ordermanagement.dto.request.CreateProductRequest;
 import com.sotatek.ordermanagement.dto.request.UpdateProductRequest;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
@@ -19,8 +20,8 @@ public class ProductService {
         if (isProductNameExists(request.getName())) {
             throw new ProductNameExistsException(request.getName());
         }
-        final Product product = Product.builder()
-                .name(request.getName()).price(request.getPrice()).build();
+        final Product product =
+                Product.builder().name(request.getName()).price(request.getPrice()).build();
         final Product savedProduct = productRepository.save(product);
         return ProductDetailsResponse.from(savedProduct);
     }

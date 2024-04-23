@@ -1,15 +1,15 @@
 package com.sotatek.ordermanagement.service;
 
+
 import com.sotatek.ordermanagement.dto.request.CreateCustomerRequest;
 import com.sotatek.ordermanagement.dto.response.CustomerDetailsResponse;
 import com.sotatek.ordermanagement.entity.Customer;
 import com.sotatek.ordermanagement.exception.CustomerPhoneExistsException;
 import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.repository.CustomerRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +21,8 @@ public class CustomerService {
         return customers.stream().map(CustomerDetailsResponse::from).toList();
     }
 
-    public List<CustomerDetailsResponse> getCustomerWithConditions(String name, String phone, String address) {
+    public List<CustomerDetailsResponse> getCustomerWithConditions(
+            String name, String phone, String address) {
         List<Customer> customers;
         if (name != null && phone != null && address != null) {
             customers = customerRepository.findAllByNameAndPhoneAndAddress(name, phone, address);
@@ -47,11 +48,12 @@ public class CustomerService {
         if (isPhoneNumberExists(request.getPhone())) {
             throw new CustomerPhoneExistsException(request.getPhone());
         }
-        final Customer customer = Customer.builder()
-                .name(request.getName())
-                .phone(request.getPhone())
-                .address(request.getAddress())
-                .build();
+        final Customer customer =
+                Customer.builder()
+                        .name(request.getName())
+                        .phone(request.getPhone())
+                        .address(request.getAddress())
+                        .build();
         final Customer savedCustomer = customerRepository.save(customer);
         return CustomerDetailsResponse.from(savedCustomer);
     }

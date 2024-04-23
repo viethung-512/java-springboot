@@ -7,9 +7,9 @@ import com.sotatek.ordermanagement.dto.request.UserLoginRequest;
 import com.sotatek.ordermanagement.dto.response.UserDetailsResponse;
 import com.sotatek.ordermanagement.dto.response.UserLoginResponse;
 import com.sotatek.ordermanagement.entity.User;
+import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.PasswordNotMatchedException;
 import com.sotatek.ordermanagement.exception.UserNameExistsException;
-import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.repository.UserRepository;
 import com.sotatek.ordermanagement.utils.jwt.JwtUtil;
 import com.sotatek.ordermanagement.utils.security.BCryptUtil;
@@ -17,7 +17,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.time.ZonedDateTime;
 import java.util.List;
-
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,8 @@ public class UserService {
         final ZonedDateTime issuedAt = ZonedDateTime.now();
         final ZonedDateTime expiredAt = issuedAt.plusHours(2);
 
-        String token = JwtUtil.generateAccessToken(
+        String token =
+                JwtUtil.generateAccessToken(
                         JwtUtil.HS512_TOKEN_HEADER,
                         "ordermanagement",
                         this.generateClaims(user),
@@ -50,7 +50,10 @@ public class UserService {
                         issuedAt,
                         expiredAt);
 
-        return UserLoginResponse.builder().username(request.getUsername()).accessToken(token).build();
+        return UserLoginResponse.builder()
+                .username(request.getUsername())
+                .accessToken(token)
+                .build();
     }
 
     public List<UserDetailsResponse> getUsers() {
@@ -64,14 +67,15 @@ public class UserService {
         }
 
         final String hashedPassword = BCryptUtil.hashPassword(request.getPassword());
-        final User user = User.builder()
-                .username(request.getUsername())
-                .name(request.getName())
-                .email(request.getEmail())
-                .phone(request.getPhone())
-                .role(request.getRole().toString())
-                .password(hashedPassword)
-                .build();
+        final User user =
+                User.builder()
+                        .username(request.getUsername())
+                        .name(request.getName())
+                        .email(request.getEmail())
+                        .phone(request.getPhone())
+                        .role(request.getRole().toString())
+                        .password(hashedPassword)
+                        .build();
         final User savedUser = userRepository.save(user);
         return UserDetailsResponse.from(savedUser);
     }

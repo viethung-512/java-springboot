@@ -15,12 +15,11 @@ import io.jsonwebtoken.security.SignatureException;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Map;
+import javax.crypto.SecretKey;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.crypto.SecretKey;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j

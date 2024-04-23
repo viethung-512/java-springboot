@@ -1,5 +1,6 @@
 package com.sotatek.ordermanagement.dto.response;
 
+
 import com.sotatek.ordermanagement.entity.Customer;
 import lombok.Builder;
 import lombok.Value;
@@ -13,7 +14,8 @@ public class CustomerDetailsResponse {
     String address;
 
     public static CustomerDetailsResponse from(final Customer customer) {
-        return CustomerDetailsResponse.builder().id(customer.getId())
+        return CustomerDetailsResponse.builder()
+                .id(customer.getId())
                 .name(customer.getName())
                 .phone(customer.getPhone())
                 .address(customer.getAddress())

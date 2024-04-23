@@ -1,5 +1,6 @@
 package com.sotatek.ordermanagement.controller;
 
+
 import com.sotatek.ordermanagement.dto.request.CreateProductRequest;
 import com.sotatek.ordermanagement.dto.request.UpdateProductRequest;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
@@ -28,7 +29,8 @@ public class ProductController {
 
     @PatchMapping("/update/{productId}")
     @Secured("ADMIN")
-    public ProductDetailsResponse updateProduct(@PathVariable("productId") long productId, @RequestBody UpdateProductRequest request) {
+    public ProductDetailsResponse updateProduct(
+            @PathVariable("productId") long productId, @RequestBody UpdateProductRequest request) {
         return productService.updateProduct(productId, request);
     }
 
