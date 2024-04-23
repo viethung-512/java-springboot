@@ -10,6 +10,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.DecodingException;
+import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -19,15 +20,14 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.crypto.SecretKey;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class JwtUtil {
-    public static final Map<String, Object> RS256_TOKEN_HEADER =
-            Map.ofEntries(Map.entry("typ", "JWT"), Map.entry("alg", "RS256"));
-    private static final String BEARER_PREFIX = "Bearer ";
-    private static final String RSA_ALGORITHM = "RSA";
-
-    private static final String JWT_SECRET = "Test 123";
+    public static final Map<String, Object> HS512_TOKEN_HEADER =
+            Map.ofEntries(Map.entry("typ", "JWT"), Map.entry("alg", "HS512"));
+    private static final SecretKey JWT_SECRET = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     @NonNull
     public static Claims extractAllClaims(@NonNull final String jwt) throws InvalidJwtError {

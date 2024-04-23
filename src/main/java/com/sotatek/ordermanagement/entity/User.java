@@ -46,4 +46,8 @@ public class User {
 
     @Column(name = "role")
     private String role;
+
+    public UserRole getRole() {
+        return UserRole.valueOf(role);
+    }
 }

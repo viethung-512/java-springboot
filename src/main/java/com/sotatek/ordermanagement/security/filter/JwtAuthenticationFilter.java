@@ -6,8 +6,11 @@ import com.sotatek.ordermanagement.utils.jwt.JwtUserPayload;
 import com.sotatek.ordermanagement.utils.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +36,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final AuthenticationEntryPoint authenticationEntryPoint;
 
-    @SneakyThrows
     @Override
     protected void doFilterInternal(
             final HttpServletRequest request,
             final HttpServletResponse response,
-            final FilterChain filterChain) {
+            final FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (!this.isBearerToken(authHeader)) {
             filterChain.doFilter(request, response);

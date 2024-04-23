@@ -1,10 +1,13 @@
 package com.sotatek.ordermanagement.service;
 
 
+import com.sotatek.ordermanagement.dto.request.CreateUserRequest;
 import com.sotatek.ordermanagement.dto.request.UserLoginRequest;
+import com.sotatek.ordermanagement.dto.response.UserDetailsResponse;
 import com.sotatek.ordermanagement.dto.response.UserLoginResponse;
 import com.sotatek.ordermanagement.entity.User;
 import com.sotatek.ordermanagement.exception.PasswordNotMatchedException;
+import com.sotatek.ordermanagement.exception.UserNameExistsException;
 import com.sotatek.ordermanagement.exception.UserNotFoundException;
 import com.sotatek.ordermanagement.repository.UserRepository;
 import com.sotatek.ordermanagement.utils.jwt.JwtUtil;
@@ -36,15 +39,37 @@ public class UserService {
         final ZonedDateTime issuedAt = ZonedDateTime.now();
         final ZonedDateTime expiredAt = issuedAt.plusHours(2);
 
-        String token =
-                JwtUtil.generateAccessToken(
-                        JwtUtil.RS256_TOKEN_HEADER,
+        String token = JwtUtil.generateAccessToken(
+                        JwtUtil.HS512_TOKEN_HEADER,
                         "ordermanagement",
                         this.generateClaims(user),
                         "user_access_token",
                         issuedAt,
                         expiredAt);
-        return null;
+
+        return UserLoginResponse.builder().username(request.getUsername()).accessToken(token).build();
+    }
+
+    public UserDetailsResponse createUser(CreateUserRequest request) {
+        if (isUsernameExists(request.getUsername())) {
+            throw new UserNameExistsException(request.getUsername());
+        }
+
+        final String hashedPassword = BCryptUtil.hashPassword(request.getPassword());
+        final User user = User.builder()
+                .username(request.getUsername())
+                .name(request.getName())
+                .email(request.getEmail())
+                .phone(request.getPhone())
+                .role(request.getRole().toString())
+                .password(hashedPassword)
+                .build();
+        final User savedUser = userRepository.save(user);
+        return UserDetailsResponse.from(savedUser);
+    }
+
+    private boolean isUsernameExists(String username) {
+        return userRepository.findByUsername(username) != null;
     }
 
     private Claims generateClaims(@NonNull final User user) {
