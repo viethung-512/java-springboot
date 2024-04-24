@@ -1,22 +1,23 @@
 package com.sotatek.ordermanagement.service;
 
+
 import com.sotatek.ordermanagement.dto.request.UpdateInventoryRequest;
 import com.sotatek.ordermanagement.dto.response.InventoryDetailsResponse;
 import com.sotatek.ordermanagement.entity.Inventory;
 import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.ProductQuantityIsNotEnoughException;
 import com.sotatek.ordermanagement.repository.InventoryRepository;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
 public class InventoryService {
     private final InventoryRepository inventoryRepository;
 
-    public InventoryDetailsResponse updateInventory(long productId, UpdateInventoryRequest request) {
+    public InventoryDetailsResponse updateInventory(
+            long productId, UpdateInventoryRequest request) {
         final Inventory inventory = getInventoryByProductIdOrFailed(productId);
         inventory.setStockQuantity(request.getStockQuantity());
         inventory.setUpdatedDate(new Date());
@@ -39,6 +40,6 @@ public class InventoryService {
         if (inventory != null) {
             return inventory;
         }
-            throw new NotFoundException("Product not found");
+        throw new NotFoundException("Product not found");
     }
 }

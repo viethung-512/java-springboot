@@ -1,10 +1,10 @@
 package com.sotatek.ordermanagement.dto.response;
 
+
 import com.sotatek.ordermanagement.entity.Inventory;
+import java.util.Date;
 import lombok.Builder;
 import lombok.Value;
-
-import java.util.Date;
 
 @Value
 @Builder

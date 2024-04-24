@@ -14,7 +14,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Date;
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,9 +1,7 @@
 package com.sotatek.ordermanagement.dto.response;
 
-import com.sotatek.ordermanagement.entity.Customer;
+
 import com.sotatek.ordermanagement.entity.LineOrder;
-import com.sotatek.ordermanagement.entity.Order;
-import com.sotatek.ordermanagement.entity.Product;
 import lombok.Builder;
 import lombok.Value;
 

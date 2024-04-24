@@ -8,17 +8,17 @@ import com.sotatek.ordermanagement.entity.Product;
 import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.ProductNameExistsException;
 import com.sotatek.ordermanagement.repository.ProductRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
 
-    public List<ProductDetailsResponse> getProducts(String name, Double price, Boolean sortPriceByDesc) {
+    public List<ProductDetailsResponse> getProducts(
+            String name, Double price, Boolean sortPriceByDesc) {
         List<Product> products;
         if (name != null && price != null) {
             products = productRepository.findAllByNameAndPrice(name, price);
@@ -33,10 +33,16 @@ public class ProductService {
         boolean isSortedPriceDesc = sortPriceByDesc != null;
         if (isSortedPriceDesc) {
 
-        products = products.stream().sorted((a, b) -> (int) (a.getPrice() - b.getPrice())).toList();
+            products =
+                    products.stream()
+                            .sorted((a, b) -> (int) (a.getPrice() - b.getPrice()))
+                            .toList();
         } else {
 
-        products = products.stream().sorted((a, b) -> (int) (a.getPrice() - b.getPrice())).toList();
+            products =
+                    products.stream()
+                            .sorted((a, b) -> (int) (a.getPrice() - b.getPrice()))
+                            .toList();
         }
 
         return products.stream().map(ProductDetailsResponse::from).toList();
