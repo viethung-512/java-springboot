@@ -25,7 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "order")
+@Table(name = "bill")
 @Builder
 public class Order {
     @Id
@@ -50,6 +50,6 @@ public class Order {
             updatable = false)
     private Customer customer;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bill", fetch = FetchType.LAZY)
     private List<LineOrder> lineOrders;
 }

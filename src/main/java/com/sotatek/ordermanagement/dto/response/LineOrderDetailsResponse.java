@@ -9,13 +9,14 @@ import lombok.Value;
 @Builder
 public class LineOrderDetailsResponse {
     long quantity;
-    CustomerDetailsResponse customer;
-    ProductDetailsResponse product;
+    long customerId;
+    long productId;
 
     public static LineOrderDetailsResponse from(LineOrder lineOrder) {
         return LineOrderDetailsResponse.builder()
-                .customer(CustomerDetailsResponse.from(lineOrder.getCustomer()))
-                .product(ProductDetailsResponse.from(lineOrder.getProduct()))
+                .quantity(lineOrder.getQuantity())
+                .customerId(lineOrder.getCustomerId())
+                .productId(lineOrder.getProductId())
                 .build();
     }
 }

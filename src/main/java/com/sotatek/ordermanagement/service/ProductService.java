@@ -11,6 +11,7 @@ import com.sotatek.ordermanagement.repository.ProductRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +50,7 @@ public class ProductService {
         return products.stream().map(ProductDetailsResponse::from).toList();
     }
 
+    @Transactional
     public ProductDetailsResponse createProduct(CreateProductRequest request) {
         if (isProductNameExists(request.getName())) {
             throw new ProductNameExistsException(request.getName());

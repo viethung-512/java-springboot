@@ -22,7 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "customer")
+@Table(name = "lineorder")
 @Builder
 public class LineOrder {
     @Id
@@ -64,5 +64,5 @@ public class LineOrder {
             referencedColumnName = "id",
             insertable = false,
             updatable = false)
-    private Order order;
+    private Order bill;
 }

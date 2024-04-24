@@ -1,8 +1,9 @@
 package com.sotatek.ordermanagement.service;
 
 
+import com.sotatek.ordermanagement.dto.request.CreateLineOrderRequest;
 import com.sotatek.ordermanagement.dto.request.CreateOrderRequest;
-import com.sotatek.ordermanagement.dto.response.LineOrderDetailsResponse;
+import com.sotatek.ordermanagement.dto.request.UpdateInventoryRequest;
 import com.sotatek.ordermanagement.dto.response.OrderDetailsResponse;
 import com.sotatek.ordermanagement.entity.Customer;
 import com.sotatek.ordermanagement.entity.Inventory;
@@ -10,15 +11,18 @@ import com.sotatek.ordermanagement.entity.LineOrder;
 import com.sotatek.ordermanagement.entity.Order;
 import com.sotatek.ordermanagement.entity.Product;
 import com.sotatek.ordermanagement.exception.DateStringIsNotCorrectException;
+import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.ProductQuantityIsNotEnoughException;
 import com.sotatek.ordermanagement.repository.OrderRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.GenericValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,14 +34,14 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
+    @Transactional
     public OrderDetailsResponse createOrder(CreateOrderRequest request) {
         final Customer customer = customerService.getCustomerByIdOrFail(request.getCustomerId());
-        final Order order = Order.builder().totalMoney((double) 0).issueDate(new Date()).build();
-        final Order savedOrder = orderRepository.save(order);
 
-        final List<LineOrder> lineOrders =
+        // Validate product & quantity & calculate totalMoney
+        Double totalMoney =
                 request.getLineOrders().stream()
-                        .map(
+                        .mapToDouble(
                                 createLineOrderRequest -> {
                                     final Product product =
                                             productService.getProductByIdOrFail(
@@ -50,26 +54,47 @@ public class OrderService {
                                         throw new ProductQuantityIsNotEnoughException(
                                                 inventory.getProduct().getName());
                                     }
-                                    return LineOrder.builder()
-                                            .customerId(customer.getId())
-                                            .productId(product.getId())
-                                            .orderId(savedOrder.getId())
-                                            .build();
+                                    return createLineOrderRequest.getQuantity()
+                                            * product.getPrice();
                                 })
-                        .toList();
-        final List<LineOrderDetailsResponse> savedLineOrders =
-                lineOrderService.savedLineOrders(lineOrders);
-
-        Double totalMoney =
-                lineOrders.stream()
-                        .mapToDouble(
-                                lineOrder ->
-                                        lineOrder.getProduct().getPrice() * lineOrder.getQuantity())
                         .sum();
-        order.setTotalMoney(totalMoney);
-        order.setIssueDate(new Date());
-        final Order updatedOrder = orderRepository.save(order);
-        return OrderDetailsResponse.from(updatedOrder);
+
+        final Order order =
+                Order.builder()
+                        .customerId(request.getCustomerId())
+                        .totalMoney(totalMoney)
+                        .issueDate(new Date())
+                        .build();
+        Order savedOrder = orderRepository.save(order);
+
+        final List<LineOrder> lineOrders = new ArrayList<>();
+        for (CreateLineOrderRequest createLineOrderRequest : request.getLineOrders()) {
+            LineOrder build =
+                    LineOrder.builder()
+                            .customerId(customer.getId())
+                            .productId(createLineOrderRequest.getProductId())
+                            .orderId(savedOrder.getId())
+                            .quantity((int) createLineOrderRequest.getQuantity())
+                            .build();
+            lineOrders.add(build);
+        }
+        final List<LineOrder> savedLineOrders = lineOrderService.savedLineOrders(lineOrders);
+        savedOrder.setLineOrders(savedLineOrders);
+        savedOrder = orderRepository.save(savedOrder);
+        savedLineOrders.forEach(
+                lineOrder -> {
+                    final Inventory inventory =
+                            inventoryService.getInventoryByProductIdOrFailed(
+                                    lineOrder.getProductId());
+                    inventoryService.updateInventory(
+                            lineOrder.getProductId(),
+                            UpdateInventoryRequest.builder()
+                                    .stockQuantity(
+                                            inventory.getStockQuantity() - lineOrder.getQuantity())
+                                    .build());
+                });
+
+        return OrderDetailsResponse.from(getOrderByIdOrFail(savedOrder.getId()));
     }
 
     public Double getTotalRevenue(String from, String to) {
@@ -81,5 +106,13 @@ public class OrderService {
         LocalDate toDate = LocalDate.parse(to);
         final List<Order> orders = orderRepository.findAllByIssueDateBetween(fromDate, toDate);
         return orders.stream().mapToDouble(Order::getTotalMoney).sum();
+    }
+
+    public Order getOrderByIdOrFail(long orderId) {
+        final Order order = orderRepository.findById(orderId);
+        if (order == null) {
+            throw new NotFoundException("Order not found");
+        }
+        return order;
     }
 }
