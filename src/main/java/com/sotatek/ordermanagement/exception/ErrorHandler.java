@@ -68,4 +68,13 @@ public class ErrorHandler {
                 new ErrorResponse(error.getErrorCode(), error.getErrorMessage()),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(DateStringIsNotCorrectException.class)
+    public ResponseEntity<ErrorResponse> handleProductQuantityIsNotEnoughException(
+            DateStringIsNotCorrectException ex) {
+        ErrorCode error = ErrorCode.DATE_STRING_IS_NOT_CORRECT;
+        return new ResponseEntity<>(
+                new ErrorResponse(error.getErrorCode(), error.getErrorMessage()),
+                HttpStatus.BAD_REQUEST);
+    }
 }

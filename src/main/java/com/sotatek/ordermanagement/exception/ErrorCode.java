@@ -11,7 +11,8 @@ public enum ErrorCode {
     USER_NOT_FOUND("3", "User not found"),
     CUSTOMER_PHONE_EXISTS("4", "Customer phone already exists!"),
     PRODUCT_NAME_EXISTS("5", "Product name already exists!"),
-    PRODUCT_QUANTITY_IS_NOT_ENOUGH("6", "Product quantity is not enough!");
+    PRODUCT_QUANTITY_IS_NOT_ENOUGH("6", "Product quantity is not enough!"),
+    DATE_STRING_IS_NOT_CORRECT("7", "Date string is not correct!");
 
     private final String errorCode;
     private final String errorMessage;

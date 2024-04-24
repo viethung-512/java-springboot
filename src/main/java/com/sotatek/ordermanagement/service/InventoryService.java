@@ -3,11 +3,14 @@ package com.sotatek.ordermanagement.service;
 
 import com.sotatek.ordermanagement.dto.request.UpdateInventoryRequest;
 import com.sotatek.ordermanagement.dto.response.InventoryDetailsResponse;
+import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
 import com.sotatek.ordermanagement.entity.Inventory;
 import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.ProductQuantityIsNotEnoughException;
 import com.sotatek.ordermanagement.repository.InventoryRepository;
 import java.util.Date;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +44,10 @@ public class InventoryService {
             return inventory;
         }
         throw new NotFoundException("Product not found");
+    }
+
+    public List<ProductDetailsResponse> getListProductQtyLessOrEqualThan3() {
+        final List<Inventory> inventories = inventoryRepository.findAllByStockQuantityLessThanEqual(3);
+        return inventories.stream().map(it -> ProductDetailsResponse.from(it.getProduct())).toList();
     }
 }
