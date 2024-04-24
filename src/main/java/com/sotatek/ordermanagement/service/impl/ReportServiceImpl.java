@@ -26,6 +26,6 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public CustomerDetailsResponse getMostPotentialCustomer() {
-        return null;
+        return orderServiceImpl.getMostPotentialCustomer();
     }
 }

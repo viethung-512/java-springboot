@@ -19,8 +19,11 @@ import com.sotatek.ordermanagement.service.OrderService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.GenericValidator;
 import org.springframework.stereotype.Service;
@@ -123,13 +126,28 @@ public class OrderServiceImpl implements OrderService {
         LocalDate toDate = LocalDate.now();
         LocalDate fromDate = LocalDate.now().minusDays(1);
         final List<Order> orders = orderRepository.findAllByIssueDateBetween(fromDate, toDate);
+        HashMap<Long, Double> ordersHashMap = new HashMap<>();
 
         orders.forEach(
                 order -> {
                     Long customerId = order.getCustomerId();
-                    Double updatedAmount = order.getTotalMoney();
+                    ordersHashMap.put(customerId, ordersHashMap.getOrDefault(customerId, 0.0) + order.getTotalMoney());
                 });
+        if (ordersHashMap.isEmpty()) {
+            return null;
+        }
 
-        return null;
+        double greatestMoney = Double.MIN_VALUE;
+        Long customerId = (long) -1;
+        for (Map.Entry<Long, Double> entry : ordersHashMap.entrySet()) {
+            Long key = entry.getKey();
+            Double value = entry.getValue();
+            if (greatestMoney < value) {
+                greatestMoney = value;
+                customerId = key;
+            }
+        }
+        Customer customer = customerServiceImpl.getCustomerByIdOrFail(customerId);
+        return CustomerDetailsResponse.from(customer);
     }
 }
