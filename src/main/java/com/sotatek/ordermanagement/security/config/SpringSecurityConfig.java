@@ -39,6 +39,8 @@ public class SpringSecurityConfig {
                         authorize
                                 .requestMatchers("/v1/users/login")
                                 .permitAll()
+                                .requestMatchers("v1/products")
+                                .permitAll()
                                 .requestMatchers("/v1/**")
                                 .authenticated()
                                 .anyRequest()

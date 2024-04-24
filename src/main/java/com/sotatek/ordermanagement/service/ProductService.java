@@ -11,10 +11,36 @@ import com.sotatek.ordermanagement.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+
+    public List<ProductDetailsResponse> getProducts(String name, Double price, Boolean sortPriceByDesc) {
+        List<Product> products;
+        if (name != null && price != null) {
+            products = productRepository.findAllByNameAndPrice(name, price);
+        } else if (name != null) {
+            products = productRepository.findAllByName(name);
+        } else if (price != null) {
+            products = productRepository.findAllByPrice(price);
+        } else {
+            products = productRepository.findAll();
+        }
+
+        boolean isSortedPriceDesc = sortPriceByDesc != null;
+        if (isSortedPriceDesc) {
+
+        products = products.stream().sorted((a, b) -> (int) (a.getPrice() - b.getPrice())).toList();
+        } else {
+
+        products = products.stream().sorted((a, b) -> (int) (a.getPrice() - b.getPrice())).toList();
+        }
+
+        return products.stream().map(ProductDetailsResponse::from).toList();
+    }
 
     public ProductDetailsResponse createProduct(CreateProductRequest request) {
         if (isProductNameExists(request.getName())) {
