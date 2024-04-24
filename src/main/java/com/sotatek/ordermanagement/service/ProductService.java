@@ -69,21 +69,17 @@ public class ProductService {
     }
 
     public ProductDetailsResponse deleteProduct(long productId) {
-        final Product product = productRepository.findById(productId);
-        if (product == null) {
-            throw new NotFoundException("Product not found");
-        }
+        final Product product = getProductByIdOrFail(productId);
         productRepository.deleteById(productId);
         return ProductDetailsResponse.from(product);
     }
 
-    public ProductDetailsResponse getProductDetails(long productId) {
+    public Product getProductByIdOrFail(long productId) {
         final Product product = productRepository.findById(productId);
-        return ProductDetailsResponse.from(product);
-    }
-
-    public boolean isProductExists(long productId) {
-        return productRepository.findById(productId) != null;
+        if (product == null) {
+            throw new NotFoundException("Product not found");
+        }
+        return product;
     }
 
     public boolean isProductNameExists(String productName) {

@@ -8,6 +8,8 @@ import com.sotatek.ordermanagement.dto.response.UserDetailsResponse;
 import com.sotatek.ordermanagement.dto.response.UserLoginResponse;
 import com.sotatek.ordermanagement.service.UserService;
 import java.util.List;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,20 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-
-    @PostMapping("login")
-    public UserLoginResponse login(@RequestBody UserLoginRequest request) {
-        return userService.login(request);
-    }
-
-    @PostMapping("logout")
-    @Secured({"ADMIN", "OPERATOR"})
-    public boolean logOut() {
-        return true;
-    }
 
     @GetMapping("")
     @Secured({"ADMIN", "OPERATOR"})

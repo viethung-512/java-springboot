@@ -6,6 +6,8 @@ import com.sotatek.ordermanagement.dto.request.UpdateProductRequest;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
 import com.sotatek.ordermanagement.service.ProductService;
 import java.util.List;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,12 +35,14 @@ public class ProductController {
     }
 
     @PostMapping("create")
+    @SecurityRequirement(name = "bearerAuth")
     @Secured({"ADMIN", "OPERATOR"})
     public ProductDetailsResponse createProduct(@RequestBody CreateProductRequest request) {
         return productService.createProduct(request);
     }
 
     @PatchMapping("/update/{productId}")
+    @SecurityRequirement(name = "bearerAuth")
     @Secured("ADMIN")
     public ProductDetailsResponse updateProduct(
             @PathVariable("productId") long productId, @RequestBody UpdateProductRequest request) {
@@ -46,6 +50,7 @@ public class ProductController {
     }
 
     @DeleteMapping("{productId}")
+    @SecurityRequirement(name = "bearerAuth")
     @Secured("ADMIN")
     public ProductDetailsResponse deleteProduct(@PathVariable("productId") long productId) {
         return productService.deleteProduct(productId);

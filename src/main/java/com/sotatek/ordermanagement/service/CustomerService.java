@@ -59,16 +59,17 @@ public class CustomerService {
     }
 
     public CustomerDetailsResponse deleteCustomer(long customerId) {
-        final Customer customer = customerRepository.findById(customerId);
-        if (customer == null) {
-            throw new NotFoundException("Customer not found");
-        }
+        final Customer customer = getCustomerByIdOrFail(customerId);
         customerRepository.deleteById(customerId);
         return CustomerDetailsResponse.from(customer);
     }
 
-    public boolean isCustomerExists(long customerId) {
-        return customerRepository.findById(customerId) != null;
+    public Customer getCustomerByIdOrFail(long customerId) {
+        final Customer customer = customerRepository.findById(customerId);
+        if (customer == null) {
+            throw new NotFoundException("Customer not found");
+        }
+        return customer;
     }
 
     private boolean isPhoneNumberExists(String phone) {
