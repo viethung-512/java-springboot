@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
+    private final InventoryService inventoryService;
     private final ProductRepository productRepository;
 
     public List<ProductDetailsResponse> getProducts(
@@ -55,6 +56,7 @@ public class ProductService {
         final Product product =
                 Product.builder().name(request.getName()).price(request.getPrice()).build();
         final Product savedProduct = productRepository.save(product);
+        inventoryService.initInventory(product.getId());
         return ProductDetailsResponse.from(savedProduct);
     }
 

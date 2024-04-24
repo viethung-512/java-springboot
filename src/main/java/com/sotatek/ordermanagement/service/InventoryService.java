@@ -5,6 +5,7 @@ import com.sotatek.ordermanagement.dto.request.UpdateInventoryRequest;
 import com.sotatek.ordermanagement.dto.response.InventoryDetailsResponse;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
 import com.sotatek.ordermanagement.entity.Inventory;
+import com.sotatek.ordermanagement.entity.Product;
 import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.ProductQuantityIsNotEnoughException;
 import com.sotatek.ordermanagement.repository.InventoryRepository;
@@ -19,6 +20,11 @@ import org.springframework.stereotype.Service;
 public class InventoryService {
     private final InventoryRepository inventoryRepository;
 
+    public void initInventory(long productId) {
+        final Inventory inventory = Inventory.builder().productId(productId).stockQuantity(0L).updatedDate(new Date()).build();
+        inventoryRepository.save(inventory);
+    }
+
     public InventoryDetailsResponse updateInventory(
             long productId, UpdateInventoryRequest request) {
         final Inventory inventory = getInventoryByProductIdOrFailed(productId);
@@ -28,15 +34,6 @@ public class InventoryService {
         return InventoryDetailsResponse.from(savedInventory);
     }
 
-    public InventoryDetailsResponse reduceStockQuantity(long productId, long incomingReduce) {
-        final Inventory inventory = getInventoryByProductIdOrFailed(productId);
-        if (incomingReduce > inventory.getStockQuantity()) {
-            throw new ProductQuantityIsNotEnoughException(inventory.getProduct().getName());
-        }
-        inventory.setStockQuantity(inventory.getStockQuantity() - incomingReduce);
-        final Inventory savedInventory = inventoryRepository.save(inventory);
-        return InventoryDetailsResponse.from(savedInventory);
-    }
 
     public Inventory getInventoryByProductIdOrFailed(long productId) {
         final Inventory inventory = inventoryRepository.findByProductId(productId);

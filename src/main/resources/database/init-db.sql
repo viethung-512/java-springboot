@@ -1,3 +1,4 @@
+drop database if exists ordermanagement;
 create database ordermanagement;
 use ordermanagement;
 

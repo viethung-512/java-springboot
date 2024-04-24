@@ -50,9 +50,9 @@ public class OrderService {
                 throw new ProductQuantityIsNotEnoughException(inventory.getProduct().getName());
             }
             return LineOrder.builder()
-                    .customer(customer)
-                    .product(product)
-                    .order(savedOrder)
+                    .customerId(customer.getId())
+                    .productId(product.getId())
+                    .orderId(savedOrder.getId())
                     .build();
         }).toList();
         final List<LineOrderDetailsResponse> savedLineOrders = lineOrderService.savedLineOrders(lineOrders);

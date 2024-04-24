@@ -36,7 +36,10 @@ public class Inventory {
     @Column(name = "updatedDate")
     private Date updatedDate;
 
+    @Column(name = "product_id")
+    private Long productId;
+
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Product product;
 }

@@ -34,15 +34,24 @@ public class LineOrder {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    @Column(name = "customer_id")
+    private Long customerId;
+
+    @Column(name = "product_id")
+    private Long productId;
+
+    @Column(name = "order_id")
+    private Long orderId;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Customer customer;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Order order;
 }

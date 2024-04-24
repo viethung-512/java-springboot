@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -39,8 +40,11 @@ public class Order {
     @Column(name = "issueDate")
     private Date issueDate;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    @Column(name = "customer_id")
+    private Long customerId;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Customer customer;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)

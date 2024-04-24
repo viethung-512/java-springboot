@@ -3,10 +3,11 @@ package com.sotatek.ordermanagement.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -37,9 +40,9 @@ public class Customer {
     @Column(name = "address")
     private String address;
 
-    @OneToOne(mappedBy = "customer")
-    private Order order;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Order> orders;
 
-    @OneToOne(mappedBy = "customer")
-    private LineOrder lineOrder;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<LineOrder> lineOrders;
 }
