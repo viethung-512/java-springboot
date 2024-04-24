@@ -67,6 +67,10 @@ public class CustomerService {
         return CustomerDetailsResponse.from(customer);
     }
 
+    public boolean isCustomerExists(long customerId) {
+        return customerRepository.findById(customerId) != null;
+    }
+
     private boolean isPhoneNumberExists(String phone) {
         return customerRepository.findByPhone(phone) != null;
     }

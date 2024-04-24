@@ -45,6 +45,15 @@ public class ProductService {
         return ProductDetailsResponse.from(product);
     }
 
+    public ProductDetailsResponse getProductDetails(long productId) {
+        final Product product = productRepository.findById(productId);
+        return ProductDetailsResponse.from(product);
+    }
+
+    public boolean isProductExists(long productId) {
+        return productRepository.findById(productId) != null;
+    }
+
     public boolean isProductNameExists(String productName) {
         return productRepository.findByName(productName) != null;
     }

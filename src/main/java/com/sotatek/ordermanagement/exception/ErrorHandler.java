@@ -59,4 +59,13 @@ public class ErrorHandler {
                 new ErrorResponse(error.getErrorCode(), error.getErrorMessage()),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ProductQuantityIsNotEnoughException.class)
+    public ResponseEntity<ErrorResponse> handleProductQuantityIsNotEnoughException(
+            ProductQuantityIsNotEnoughException ex) {
+        ErrorCode error = ErrorCode.PRODUCT_NAME_EXISTS;
+        return new ResponseEntity<>(
+                new ErrorResponse(error.getErrorCode(), error.getErrorMessage()),
+                HttpStatus.BAD_REQUEST);
+    }
 }

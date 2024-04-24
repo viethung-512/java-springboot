@@ -10,7 +10,8 @@ public enum ErrorCode {
     USERNAME_EXISTS("2", "Username already exists!"),
     USER_NOT_FOUND("3", "User not found"),
     CUSTOMER_PHONE_EXISTS("4", "Customer phone already exists!"),
-    PRODUCT_NAME_EXISTS("5", "Product name already exists!");
+    PRODUCT_NAME_EXISTS("5", "Product name already exists!"),
+    PRODUCT_QUANTITY_IS_NOT_ENOUGH("6", "Product quantity is not enough!");
 
     private final String errorCode;
     private final String errorMessage;
