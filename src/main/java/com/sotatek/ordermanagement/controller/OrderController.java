@@ -3,7 +3,7 @@ package com.sotatek.ordermanagement.controller;
 
 import com.sotatek.ordermanagement.dto.request.CreateOrderRequest;
 import com.sotatek.ordermanagement.dto.response.OrderDetailsResponse;
-import com.sotatek.ordermanagement.service.OrderService;
+import com.sotatek.ordermanagement.service.impl.OrderServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class OrderController {
-    private final OrderService orderService;
+    private final OrderServiceImpl orderServiceImpl;
 
     @PostMapping("create")
     @Secured({"ADMIN", "OPERATOR"})
     public OrderDetailsResponse createOrder(@RequestBody CreateOrderRequest request) {
-        return orderService.createOrder(request);
+        return orderServiceImpl.createOrder(request);
     }
 }

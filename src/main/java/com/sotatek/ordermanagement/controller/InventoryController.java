@@ -3,7 +3,7 @@ package com.sotatek.ordermanagement.controller;
 
 import com.sotatek.ordermanagement.dto.request.UpdateInventoryRequest;
 import com.sotatek.ordermanagement.dto.response.InventoryDetailsResponse;
-import com.sotatek.ordermanagement.service.InventoryService;
+import com.sotatek.ordermanagement.service.impl.InventoryServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class InventoryController {
-    private final InventoryService inventoryService;
+    private final InventoryServiceImpl inventoryServiceImpl;
 
     @PatchMapping("{productId}")
     @Secured({"ADMIN", "OPERATOR"})
     public InventoryDetailsResponse updateInventory(
             @PathVariable("productId") long productId,
             @RequestBody UpdateInventoryRequest request) {
-        return inventoryService.updateInventory(productId, request);
+        return inventoryServiceImpl.updateInventory(productId, request);
     }
 }

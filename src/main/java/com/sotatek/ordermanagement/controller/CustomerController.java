@@ -3,7 +3,7 @@ package com.sotatek.ordermanagement.controller;
 
 import com.sotatek.ordermanagement.dto.request.CreateCustomerRequest;
 import com.sotatek.ordermanagement.dto.response.CustomerDetailsResponse;
-import com.sotatek.ordermanagement.service.CustomerService;
+import com.sotatek.ordermanagement.service.impl.CustomerServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class CustomerController {
-    private final CustomerService customerService;
+    private final CustomerServiceImpl customerServiceImpl;
 
     @GetMapping("")
     @Secured({"ADMIN", "OPERATOR"})
@@ -30,18 +30,18 @@ public class CustomerController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String phone,
             @RequestParam(required = false) String address) {
-        return customerService.getCustomerWithConditions(name, phone, address);
+        return customerServiceImpl.getCustomerWithConditions(name, phone, address);
     }
 
     @PostMapping("create")
     @Secured({"ADMIN", "OPERATOR"})
     public CustomerDetailsResponse createCustomer(@RequestBody CreateCustomerRequest request) {
-        return customerService.createCustomer(request);
+        return customerServiceImpl.createCustomer(request);
     }
 
     @DeleteMapping("{customerId}")
     @Secured("ADMIN")
     public CustomerDetailsResponse deleteCustomer(@PathVariable("customerId") long customerId) {
-        return customerService.deleteCustomer(customerId);
+        return customerServiceImpl.deleteCustomer(customerId);
     }
 }

@@ -3,7 +3,7 @@ package com.sotatek.ordermanagement.controller;
 
 import com.sotatek.ordermanagement.dto.request.UserLoginRequest;
 import com.sotatek.ordermanagement.dto.response.UserLoginResponse;
-import com.sotatek.ordermanagement.service.UserService;
+import com.sotatek.ordermanagement.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     @PostMapping("login")
     public UserLoginResponse login(@RequestBody UserLoginRequest request) {
-        return userService.login(request);
+        return userServiceImpl.login(request);
     }
 
     @PostMapping("logout")

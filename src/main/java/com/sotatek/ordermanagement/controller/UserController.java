@@ -4,7 +4,7 @@ package com.sotatek.ordermanagement.controller;
 import com.sotatek.ordermanagement.dto.request.CreateUserRequest;
 import com.sotatek.ordermanagement.dto.request.ResetPasswordRequest;
 import com.sotatek.ordermanagement.dto.response.UserDetailsResponse;
-import com.sotatek.ordermanagement.service.UserService;
+import com.sotatek.ordermanagement.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,29 +22,29 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     @GetMapping("")
     @Secured({"ADMIN", "OPERATOR"})
     public List<UserDetailsResponse> getUsers() {
-        return userService.getUsers();
+        return userServiceImpl.getUsers();
     }
 
     @PostMapping("create")
     @Secured("ADMIN")
     public UserDetailsResponse createUser(@RequestBody CreateUserRequest request) {
-        return userService.createUser(request);
+        return userServiceImpl.createUser(request);
     }
 
     @PostMapping("reset-password")
     @Secured("ADMIN")
     public UserDetailsResponse resetUserPassword(@RequestBody ResetPasswordRequest request) {
-        return userService.resetUserPassword(request);
+        return userServiceImpl.resetUserPassword(request);
     }
 
     @DeleteMapping("{userId}")
     @Secured("ADMIN")
     public UserDetailsResponse deleteUser(@PathVariable("userId") long userId) {
-        return userService.deleteUser(userId);
+        return userServiceImpl.deleteUser(userId);
     }
 }
