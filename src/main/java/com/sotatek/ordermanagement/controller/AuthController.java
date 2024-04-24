@@ -1,5 +1,6 @@
 package com.sotatek.ordermanagement.controller;
 
+
 import com.sotatek.ordermanagement.dto.request.UserLoginRequest;
 import com.sotatek.ordermanagement.dto.response.UserLoginResponse;
 import com.sotatek.ordermanagement.service.UserService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
+
     @PostMapping("login")
     public UserLoginResponse login(@RequestBody UserLoginRequest request) {
         return userService.login(request);

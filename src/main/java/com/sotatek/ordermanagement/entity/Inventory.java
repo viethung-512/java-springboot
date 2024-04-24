@@ -40,6 +40,10 @@ public class Inventory {
     private Long productId;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(
+            name = "product_id",
+            referencedColumnName = "id",
+            insertable = false,
+            updatable = false)
     private Product product;
 }

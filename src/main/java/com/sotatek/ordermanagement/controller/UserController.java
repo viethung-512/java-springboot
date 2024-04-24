@@ -3,13 +3,10 @@ package com.sotatek.ordermanagement.controller;
 
 import com.sotatek.ordermanagement.dto.request.CreateUserRequest;
 import com.sotatek.ordermanagement.dto.request.ResetPasswordRequest;
-import com.sotatek.ordermanagement.dto.request.UserLoginRequest;
 import com.sotatek.ordermanagement.dto.response.UserDetailsResponse;
-import com.sotatek.ordermanagement.dto.response.UserLoginResponse;
 import com.sotatek.ordermanagement.service.UserService;
-import java.util.List;
-
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;

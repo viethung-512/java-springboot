@@ -1,4 +1,3 @@
 package com.sotatek.ordermanagement.exception;
 
-public class DateStringIsNotCorrectException extends RuntimeException {
-}
+public class DateStringIsNotCorrectException extends RuntimeException {}

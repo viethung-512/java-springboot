@@ -5,9 +5,8 @@ import com.sotatek.ordermanagement.dto.request.CreateProductRequest;
 import com.sotatek.ordermanagement.dto.request.UpdateProductRequest;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
 import com.sotatek.ordermanagement.service.ProductService;
-import java.util.List;
-
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
