@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.GenericValidator;
 import org.springframework.stereotype.Service;
@@ -131,7 +130,9 @@ public class OrderServiceImpl implements OrderService {
         orders.forEach(
                 order -> {
                     Long customerId = order.getCustomerId();
-                    ordersHashMap.put(customerId, ordersHashMap.getOrDefault(customerId, 0.0) + order.getTotalMoney());
+                    ordersHashMap.put(
+                            customerId,
+                            ordersHashMap.getOrDefault(customerId, 0.0) + order.getTotalMoney());
                 });
         if (ordersHashMap.isEmpty()) {
             return null;
