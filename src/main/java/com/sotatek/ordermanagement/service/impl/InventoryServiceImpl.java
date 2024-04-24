@@ -7,10 +7,9 @@ import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
 import com.sotatek.ordermanagement.entity.Inventory;
 import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.repository.InventoryRepository;
+import com.sotatek.ordermanagement.service.InventoryService;
 import java.util.Date;
 import java.util.List;
-
-import com.sotatek.ordermanagement.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

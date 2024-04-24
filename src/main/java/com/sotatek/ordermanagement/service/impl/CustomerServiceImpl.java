@@ -7,9 +7,8 @@ import com.sotatek.ordermanagement.entity.Customer;
 import com.sotatek.ordermanagement.exception.CustomerPhoneExistsException;
 import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.repository.CustomerRepository;
-import java.util.List;
-
 import com.sotatek.ordermanagement.service.CustomerService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

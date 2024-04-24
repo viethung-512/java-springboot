@@ -15,17 +15,12 @@ import com.sotatek.ordermanagement.exception.DateStringIsNotCorrectException;
 import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.ProductQuantityIsNotEnoughException;
 import com.sotatek.ordermanagement.repository.OrderRepository;
+import com.sotatek.ordermanagement.service.OrderService;
 import java.time.LocalDate;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-
-import com.sotatek.ordermanagement.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.GenericValidator;
 import org.springframework.stereotype.Service;
@@ -43,7 +38,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     public OrderDetailsResponse createOrder(CreateOrderRequest request) {
-        final Customer customer = customerServiceImpl.getCustomerByIdOrFail(request.getCustomerId());
+        final Customer customer =
+                customerServiceImpl.getCustomerByIdOrFail(request.getCustomerId());
 
         // Validate product & quantity & calculate totalMoney
         Double totalMoney =
@@ -128,11 +124,11 @@ public class OrderServiceImpl implements OrderService {
         LocalDate fromDate = LocalDate.now().minusDays(1);
         final List<Order> orders = orderRepository.findAllByIssueDateBetween(fromDate, toDate);
 
-
-        orders.forEach(order -> {
-            Long customerId = order.getCustomerId();
-            Double updatedAmount = order.getTotalMoney();
-        });
+        orders.forEach(
+                order -> {
+                    Long customerId = order.getCustomerId();
+                    Double updatedAmount = order.getTotalMoney();
+                });
 
         return null;
     }

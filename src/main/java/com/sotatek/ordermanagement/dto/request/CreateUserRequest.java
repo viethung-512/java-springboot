@@ -10,17 +10,10 @@ import lombok.Value;
 @Value
 @Builder
 public class CreateUserRequest {
-    @NotEmpty
-    String username;
-    @NotEmpty
-    String name;
-    @Email
-    @NotEmpty
-    String email;
-    @NotEmpty
-    String phone;
-    @NotEmpty
-    String password;
-    @NotEmpty
-    UserRole role;
+    @NotEmpty String username;
+    @NotEmpty String name;
+    @Email @NotEmpty String email;
+    @NotEmpty String phone;
+    @NotEmpty String password;
+    @NotEmpty UserRole role;
 }

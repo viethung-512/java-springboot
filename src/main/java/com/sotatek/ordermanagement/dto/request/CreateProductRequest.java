@@ -9,8 +9,8 @@ import lombok.Value;
 @Value
 @Builder
 public class CreateProductRequest {
-    @NotEmpty
-    String name;
+    @NotEmpty String name;
+
     @Min(0)
     Double price;
 }

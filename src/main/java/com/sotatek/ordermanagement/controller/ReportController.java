@@ -3,8 +3,6 @@ package com.sotatek.ordermanagement.controller;
 
 import com.sotatek.ordermanagement.dto.response.CustomerDetailsResponse;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
-import com.sotatek.ordermanagement.service.impl.InventoryServiceImpl;
-import com.sotatek.ordermanagement.service.impl.OrderServiceImpl;
 import com.sotatek.ordermanagement.service.impl.ReportServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.List;

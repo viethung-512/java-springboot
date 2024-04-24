@@ -8,10 +8,7 @@ import lombok.Value;
 @Value
 @Builder
 public class CreateCustomerRequest {
-    @NotEmpty
-    String name;
-    @NotEmpty
-    String phone;
-    @NotEmpty
-    String address;
+    @NotEmpty String name;
+    @NotEmpty String phone;
+    @NotEmpty String address;
 }

@@ -1,12 +1,12 @@
 package com.sotatek.ordermanagement.service.impl;
 
+
 import com.sotatek.ordermanagement.dto.response.CustomerDetailsResponse;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
 import com.sotatek.ordermanagement.service.ReportService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

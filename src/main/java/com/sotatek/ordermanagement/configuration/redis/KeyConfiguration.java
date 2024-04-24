@@ -1,12 +1,11 @@
 package com.sotatek.ordermanagement.configuration.redis;
 
 
+import java.lang.reflect.Method;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
-
-import java.lang.reflect.Method;
 
 @Configuration
 public class KeyConfiguration {

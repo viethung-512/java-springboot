@@ -8,8 +8,6 @@ import lombok.Value;
 @Value
 @Builder
 public class ResetPasswordRequest {
-    @NotEmpty
-    String username;
-    @NotEmpty
-    String updatedPassword;
+    @NotEmpty String username;
+    @NotEmpty String updatedPassword;
 }

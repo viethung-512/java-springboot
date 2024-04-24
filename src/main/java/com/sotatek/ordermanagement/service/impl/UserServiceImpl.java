@@ -20,11 +20,9 @@ import io.jsonwebtoken.Jwts;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
-
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
 
 @Service
 @RequiredArgsConstructor

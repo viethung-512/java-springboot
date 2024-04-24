@@ -5,9 +5,8 @@ import com.sotatek.ordermanagement.dto.request.CreateCustomerRequest;
 import com.sotatek.ordermanagement.dto.response.CustomerDetailsResponse;
 import com.sotatek.ordermanagement.service.impl.CustomerServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import java.util.List;
-
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,7 +36,8 @@ public class CustomerController {
 
     @PostMapping("create")
     @Secured({"ADMIN", "OPERATOR"})
-    public CustomerDetailsResponse createCustomer(@Valid @RequestBody CreateCustomerRequest request) {
+    public CustomerDetailsResponse createCustomer(
+            @Valid @RequestBody CreateCustomerRequest request) {
         return customerServiceImpl.createCustomer(request);
     }
 
