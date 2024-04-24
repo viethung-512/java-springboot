@@ -7,3 +7,7 @@ server:
   port: 8080
   servlet:
     context-path: /api/v1
+
+
+jwt:
+  secretKey: SeVUMdGZGhJffiJ3jrz4GM5tTl1ZIeFBnuQb8ePzho0ieJIOxqDL8tXIZJkj9+DAq55UAHzBfqpCOHfuIAHh8g==

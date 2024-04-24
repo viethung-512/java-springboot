@@ -4,6 +4,7 @@ package com.sotatek.ordermanagement.service.impl;
 import com.sotatek.ordermanagement.dto.request.CreateLineOrderRequest;
 import com.sotatek.ordermanagement.dto.request.CreateOrderRequest;
 import com.sotatek.ordermanagement.dto.request.UpdateInventoryRequest;
+import com.sotatek.ordermanagement.dto.response.CustomerDetailsResponse;
 import com.sotatek.ordermanagement.dto.response.OrderDetailsResponse;
 import com.sotatek.ordermanagement.entity.Customer;
 import com.sotatek.ordermanagement.entity.Inventory;
@@ -15,10 +16,14 @@ import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.ProductQuantityIsNotEnoughException;
 import com.sotatek.ordermanagement.repository.OrderRepository;
 import java.time.LocalDate;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 import com.sotatek.ordermanagement.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -116,5 +121,19 @@ public class OrderServiceImpl implements OrderService {
             throw new NotFoundException("Order not found");
         }
         return order;
+    }
+
+    public CustomerDetailsResponse getMostPotentialCustomer() {
+        LocalDate toDate = LocalDate.now();
+        LocalDate fromDate = LocalDate.now().minusDays(1);
+        final List<Order> orders = orderRepository.findAllByIssueDateBetween(fromDate, toDate);
+
+
+        orders.forEach(order -> {
+            Long customerId = order.getCustomerId();
+            Double updatedAmount = order.getTotalMoney();
+        });
+
+        return null;
     }
 }

@@ -7,6 +7,8 @@ import com.sotatek.ordermanagement.dto.response.UserDetailsResponse;
 import com.sotatek.ordermanagement.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,13 +34,13 @@ public class UserController {
 
     @PostMapping("create")
     @Secured("ADMIN")
-    public UserDetailsResponse createUser(@RequestBody CreateUserRequest request) {
+    public UserDetailsResponse createUser(@Valid @RequestBody CreateUserRequest request) {
         return userServiceImpl.createUser(request);
     }
 
     @PostMapping("reset-password")
     @Secured("ADMIN")
-    public UserDetailsResponse resetUserPassword(@RequestBody ResetPasswordRequest request) {
+    public UserDetailsResponse resetUserPassword(@Valid @RequestBody ResetPasswordRequest request) {
         return userServiceImpl.resetUserPassword(request);
     }
 

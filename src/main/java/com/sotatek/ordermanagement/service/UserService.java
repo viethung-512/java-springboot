@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface UserService {
     public UserLoginResponse login(UserLoginRequest request);
+    public boolean logout(String authorizationToken);
     public List<UserDetailsResponse> getUsers();
     public UserDetailsResponse createUser(CreateUserRequest request);
     public UserDetailsResponse resetUserPassword(ResetPasswordRequest request);

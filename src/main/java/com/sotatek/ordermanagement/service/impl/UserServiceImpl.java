@@ -11,6 +11,7 @@ import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.PasswordNotMatchedException;
 import com.sotatek.ordermanagement.exception.UserNameExistsException;
 import com.sotatek.ordermanagement.repository.UserRepository;
+import com.sotatek.ordermanagement.service.RedisService;
 import com.sotatek.ordermanagement.service.UserService;
 import com.sotatek.ordermanagement.utils.jwt.JwtUtil;
 import com.sotatek.ordermanagement.utils.security.BCryptUtil;
@@ -18,14 +19,18 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final RedisService redisService;
 
     public UserLoginResponse login(UserLoginRequest request) {
         final User user = userRepository.findByUsername(request.getUsername());
@@ -37,7 +42,13 @@ public class UserServiceImpl implements UserService {
         }
 
         // Generate token
-        // TODO: Need to add the logic implement get the token from redis cache here
+        Optional<String> accessToken = this.redisService.getUserAccessToken(user.getUsername());
+        if (accessToken.isPresent()) {
+            return UserLoginResponse.builder()
+                    .username(user.getUsername())
+                    .accessToken(accessToken.get())
+                    .build();
+        }
 
         final ZonedDateTime issuedAt = ZonedDateTime.now();
         final ZonedDateTime expiredAt = issuedAt.plusHours(2);
@@ -55,6 +66,14 @@ public class UserServiceImpl implements UserService {
                 .username(request.getUsername())
                 .accessToken(token)
                 .build();
+    }
+
+    public boolean logout(String authorizationToken) {
+        final String jwtToken = authorizationToken.substring(7);
+        Claims claims = JwtUtil.extractAllClaims(jwtToken);
+        final String username = (String) claims.get("username");
+        this.redisService.deleteUserAccessToken(username);
+        return true;
     }
 
     public List<UserDetailsResponse> getUsers() {

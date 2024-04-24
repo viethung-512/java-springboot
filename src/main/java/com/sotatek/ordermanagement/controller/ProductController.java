@@ -7,6 +7,8 @@ import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
 import com.sotatek.ordermanagement.service.impl.ProductServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,7 +38,7 @@ public class ProductController {
     @PostMapping("create")
     @SecurityRequirement(name = "bearerAuth")
     @Secured({"ADMIN", "OPERATOR"})
-    public ProductDetailsResponse createProduct(@RequestBody CreateProductRequest request) {
+    public ProductDetailsResponse createProduct(@Valid @RequestBody CreateProductRequest request) {
         return productServiceImpl.createProduct(request);
     }
 
@@ -44,7 +46,7 @@ public class ProductController {
     @SecurityRequirement(name = "bearerAuth")
     @Secured("ADMIN")
     public ProductDetailsResponse updateProduct(
-            @PathVariable("productId") long productId, @RequestBody UpdateProductRequest request) {
+            @PathVariable("productId") long productId, @Valid @RequestBody UpdateProductRequest request) {
         return productServiceImpl.updateProduct(productId, request);
     }
 
