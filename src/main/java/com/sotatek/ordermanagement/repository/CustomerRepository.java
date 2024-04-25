@@ -14,17 +14,16 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Customer findById(long id);
 
-    List<Customer> findAllByName(String name);
+    List<Customer> findAllByNameLikeIgnoreCase(String name);
 
     List<Customer> findAllByPhone(String name);
 
-    List<Customer> findAllByAddress(String name);
+    List<Customer> findAllByAddressLikeIgnoreCase(String name);
+    List<Customer> findAllByNameLikeIgnoreCaseAndPhone(String name, String phone);
 
-    List<Customer> findAllByNameAndPhone(String name, String phone);
+    List<Customer> findAllByNameLikeIgnoreCaseAndAddressLikeIgnoreCase(String name, String address);
 
-    List<Customer> findAllByNameAndAddress(String name, String address);
+    List<Customer> findAllByPhoneAndAddressLikeIgnoreCase(String name, String address);
 
-    List<Customer> findAllByPhoneAndAddress(String name, String address);
-
-    List<Customer> findAllByNameAndPhoneAndAddress(String name, String phone, String address);
+    List<Customer> findAllByNameLikeIgnoreCaseAndPhoneAndAddressLikeIgnoreCase(String name, String phone, String address);
 }
