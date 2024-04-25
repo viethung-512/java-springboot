@@ -26,11 +26,15 @@ public class CustomerServiceImpl implements CustomerService {
             String name, String phone, String address) {
         List<Customer> customers;
         if (name != null && phone != null && address != null) {
-            customers = customerRepository.findAllByNameLikeIgnoreCaseAndPhoneAndAddressLikeIgnoreCase(name, phone, address);
+            customers =
+                    customerRepository.findAllByNameLikeIgnoreCaseAndPhoneAndAddressLikeIgnoreCase(
+                            name, phone, address);
         } else if (name != null && phone != null) {
             customers = customerRepository.findAllByNameLikeIgnoreCaseAndPhone(name, phone);
         } else if (name != null && address != null) {
-            customers = customerRepository.findAllByNameLikeIgnoreCaseAndAddressLikeIgnoreCase(name, address);
+            customers =
+                    customerRepository.findAllByNameLikeIgnoreCaseAndAddressLikeIgnoreCase(
+                            name, address);
         } else if (phone != null && address != null) {
             customers = customerRepository.findAllByPhoneAndAddressLikeIgnoreCase(phone, address);
         } else if (name != null) {

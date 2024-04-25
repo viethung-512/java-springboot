@@ -19,11 +19,13 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> findAllByPhone(String name);
 
     List<Customer> findAllByAddressLikeIgnoreCase(String name);
+
     List<Customer> findAllByNameLikeIgnoreCaseAndPhone(String name, String phone);
 
     List<Customer> findAllByNameLikeIgnoreCaseAndAddressLikeIgnoreCase(String name, String address);
 
     List<Customer> findAllByPhoneAndAddressLikeIgnoreCase(String name, String address);
 
-    List<Customer> findAllByNameLikeIgnoreCaseAndPhoneAndAddressLikeIgnoreCase(String name, String phone, String address);
+    List<Customer> findAllByNameLikeIgnoreCaseAndPhoneAndAddressLikeIgnoreCase(
+            String name, String phone, String address);
 }
