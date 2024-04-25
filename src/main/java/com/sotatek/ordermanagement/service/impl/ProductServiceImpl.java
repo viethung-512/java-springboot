@@ -2,6 +2,7 @@ package com.sotatek.ordermanagement.service.impl;
 
 
 import com.sotatek.ordermanagement.dto.request.CreateProductRequest;
+import com.sotatek.ordermanagement.dto.request.SortType;
 import com.sotatek.ordermanagement.dto.request.UpdateProductRequest;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
 import com.sotatek.ordermanagement.entity.Product;
@@ -21,26 +22,16 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     public List<ProductDetailsResponse> getProducts(
-            String name, Double price, Boolean sortPriceByDesc) {
-        List<Product> products;
-        if (name != null && price != null) {
-            products = productRepository.findAllByNameAndPrice(name, price);
-        } else if (name != null) {
-            products = productRepository.findAllByName(name);
-        } else if (price != null) {
-            products = productRepository.findAllByPrice(price);
-        } else {
-            products = productRepository.findAll();
-        }
+            String name, Double price, SortType sortPriceType) {
+        List<Product> products = productRepository.findAllWithCondition(name, price);
 
-        boolean isSortedPriceDesc = sortPriceByDesc != null;
-        if (isSortedPriceDesc) {
+        if (sortPriceType == SortType.DESC) {
 
             products =
                     products.stream()
-                            .sorted((a, b) -> (int) (a.getPrice() - b.getPrice()))
+                            .sorted((a, b) -> (int) (b.getPrice() - a.getPrice()))
                             .toList();
-        } else {
+        } else if (sortPriceType == SortType.ASC) {
 
             products =
                     products.stream()

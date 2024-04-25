@@ -24,28 +24,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     public List<CustomerDetailsResponse> getCustomerWithConditions(
             String name, String phone, String address) {
-        List<Customer> customers;
-        if (name != null && phone != null && address != null) {
-            customers =
-                    customerRepository.findAllByNameLikeIgnoreCaseAndPhoneAndAddressLikeIgnoreCase(
-                            name, phone, address);
-        } else if (name != null && phone != null) {
-            customers = customerRepository.findAllByNameLikeIgnoreCaseAndPhone(name, phone);
-        } else if (name != null && address != null) {
-            customers =
-                    customerRepository.findAllByNameLikeIgnoreCaseAndAddressLikeIgnoreCase(
-                            name, address);
-        } else if (phone != null && address != null) {
-            customers = customerRepository.findAllByPhoneAndAddressLikeIgnoreCase(phone, address);
-        } else if (name != null) {
-            customers = customerRepository.findAllByNameLikeIgnoreCase(name);
-        } else if (phone != null) {
-            customers = customerRepository.findAllByPhone(phone);
-        } else if (address != null) {
-            customers = customerRepository.findAllByAddressLikeIgnoreCase(address);
-        } else {
-            customers = customerRepository.findAll();
-        }
+        final List<Customer> customers =
+                customerRepository.findAllWithCondition(name, phone, address);
         return customers.stream().map(CustomerDetailsResponse::from).toList();
     }
 

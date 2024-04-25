@@ -2,6 +2,7 @@ package com.sotatek.ordermanagement.service;
 
 
 import com.sotatek.ordermanagement.dto.request.CreateProductRequest;
+import com.sotatek.ordermanagement.dto.request.SortType;
 import com.sotatek.ordermanagement.dto.request.UpdateProductRequest;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
 import com.sotatek.ordermanagement.entity.Product;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface ProductService {
     public List<ProductDetailsResponse> getProducts(
-            String name, Double price, Boolean sortPriceByDesc);
+            String name, Double price, SortType sortPriceType);
 
     public ProductDetailsResponse createProduct(CreateProductRequest request);
 

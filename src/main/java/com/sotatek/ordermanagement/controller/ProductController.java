@@ -2,6 +2,7 @@ package com.sotatek.ordermanagement.controller;
 
 
 import com.sotatek.ordermanagement.dto.request.CreateProductRequest;
+import com.sotatek.ordermanagement.dto.request.SortType;
 import com.sotatek.ordermanagement.dto.request.UpdateProductRequest;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
 import com.sotatek.ordermanagement.service.impl.ProductServiceImpl;
@@ -30,8 +31,8 @@ public class ProductController {
     public List<ProductDetailsResponse> getProducts(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Double price,
-            @RequestParam(required = false) Boolean sortPriceByDesc) {
-        return productServiceImpl.getProducts(name, price, sortPriceByDesc);
+            @RequestParam(required = false) SortType sortPriceType) {
+        return productServiceImpl.getProducts(name, price, sortPriceType);
     }
 
     @PostMapping("create")
