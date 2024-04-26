@@ -6,12 +6,15 @@ import com.sotatek.ordermanagement.dto.response.CustomerDetailsResponse;
 import com.sotatek.ordermanagement.dto.response.OrderDetailsResponse;
 import com.sotatek.ordermanagement.entity.Order;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 public interface OrderService {
     public OrderDetailsResponse createOrder(CreateOrderRequest request);
 
-    public Double getTotalRevenue(String from, String to);
+    public Double getTotalRevenue(LocalDateTime from, LocalDateTime to);
 
-    public Order getOrderByIdOrFail(long orderId);
+    public Order getOrderById(long orderId);
 
     public CustomerDetailsResponse getMostPotentialCustomer();
 }

@@ -13,8 +13,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Customer findByPhone(String phone);
 
-    Customer findById(long id);
-
     @Query(
             value =
                     "SELECT C from Customer C WHERE (:name IS NULL OR C.name LIKE CONCAT('%',"

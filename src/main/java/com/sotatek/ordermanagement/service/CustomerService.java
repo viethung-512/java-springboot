@@ -16,7 +16,7 @@ public interface CustomerService {
 
     public CustomerDetailsResponse deleteCustomer(long customerId);
 
-    public Customer getCustomerByIdOrFail(long customerId);
+    public Customer getCustomerById(long customerId);
 
     public boolean isPhoneNumberExists(String phone);
 }

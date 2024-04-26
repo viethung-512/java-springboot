@@ -18,7 +18,7 @@ public interface ProductService {
 
     public ProductDetailsResponse deleteProduct(long productId);
 
-    public Product getProductByIdOrFail(long productId);
+    public Product getProductById(long productId);
 
     public boolean isProductNameExists(String productName);
 }

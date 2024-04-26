@@ -5,8 +5,12 @@ import com.sotatek.ordermanagement.dto.response.CustomerDetailsResponse;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
 import com.sotatek.ordermanagement.service.impl.ReportServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +32,10 @@ public class ReportController {
 
     @GetMapping("total-revenue")
     @Secured({"ADMIN", "OPERATOR"})
-    public Double getTotalRevenue(@RequestParam() String from, @RequestParam() String to) {
+    public Double getTotalRevenue(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to
+    ) {
         return reportServiceImpl.getTotalRevenue(from, to);
     }
 

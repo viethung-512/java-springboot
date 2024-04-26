@@ -55,27 +55,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public ProductDetailsResponse updateProduct(long productId, UpdateProductRequest request) {
-        final Product product = productRepository.findById(productId);
-        if (product == null) {
-            throw new NotFoundException("Product not found");
-        }
+        final Product product = getProductById(productId);
         product.setPrice(request.getPrice());
         final Product savedProduct = productRepository.save(product);
         return ProductDetailsResponse.from(savedProduct);
     }
 
     public ProductDetailsResponse deleteProduct(long productId) {
-        final Product product = getProductByIdOrFail(productId);
+        final Product product = getProductById(productId);
         productRepository.deleteById(productId);
         return ProductDetailsResponse.from(product);
     }
 
-    public Product getProductByIdOrFail(long productId) {
-        final Product product = productRepository.findById(productId);
-        if (product == null) {
-            throw new NotFoundException("Product not found");
-        }
-        return product;
+    public Product getProductById(long productId) {
+        return productRepository.findById(productId).orElseThrow(() -> new NotFoundException("Product not found"));
     }
 
     public boolean isProductNameExists(String productName) {

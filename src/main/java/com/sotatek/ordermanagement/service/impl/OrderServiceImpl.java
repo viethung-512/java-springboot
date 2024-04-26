@@ -16,7 +16,10 @@ import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.ProductQuantityIsNotEnoughException;
 import com.sotatek.ordermanagement.repository.OrderRepository;
 import com.sotatek.ordermanagement.service.OrderService;
+
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +27,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.validator.GenericValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderDetailsResponse createOrder(CreateOrderRequest request) {
         final Customer customer =
-                customerServiceImpl.getCustomerByIdOrFail(request.getCustomerId());
+                customerServiceImpl.getCustomerById(request.getCustomerId());
 
         // Validate product & quantity & calculate totalMoney
         Double totalMoney =
@@ -49,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
                         .mapToDouble(
                                 createLineOrderRequest -> {
                                     final Product product =
-                                            productServiceImpl.getProductByIdOrFail(
+                                            productServiceImpl.getProductById(
                                                     createLineOrderRequest.getProductId());
                                     final Inventory inventory =
                                             inventoryServiceImpl.getInventoryByProductIdOrFailed(
@@ -99,56 +101,23 @@ public class OrderServiceImpl implements OrderService {
                                     .build());
                 });
 
-        return OrderDetailsResponse.from(getOrderByIdOrFail(savedOrder.getId()));
+        return OrderDetailsResponse.from(getOrderById(savedOrder.getId()));
     }
 
-    public Double getTotalRevenue(String from, String to) {
-        if (!GenericValidator.isDate(from, Locale.ROOT)
-                || !GenericValidator.isDate(to, Locale.ROOT)) {
-            throw new DateStringIsNotCorrectException();
-        }
-        LocalDate fromDate = LocalDate.parse(from);
-        LocalDate toDate = LocalDate.parse(to);
-        final List<Order> orders = orderRepository.findAllByIssueDateBetween(fromDate, toDate);
-        return orders.stream().mapToDouble(Order::getTotalMoney).sum();
+    public Double getTotalRevenue(LocalDateTime from, LocalDateTime to) {
+        return orderRepository.findTotalRevenueBetween(from, to);
     }
 
-    public Order getOrderByIdOrFail(long orderId) {
-        final Order order = orderRepository.findById(orderId);
-        if (order == null) {
-            throw new NotFoundException("Order not found");
-        }
-        return order;
+    public Order getOrderById(long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found"));
     }
 
     public CustomerDetailsResponse getMostPotentialCustomer() {
-        LocalDate toDate = LocalDate.now();
-        LocalDate fromDate = LocalDate.now().minusDays(1);
-        final List<Order> orders = orderRepository.findAllByIssueDateBetween(fromDate, toDate);
-        HashMap<Long, Double> ordersHashMap = new HashMap<>();
-
-        orders.forEach(
-                order -> {
-                    Long customerId = order.getCustomerId();
-                    ordersHashMap.put(
-                            customerId,
-                            ordersHashMap.getOrDefault(customerId, 0.0) + order.getTotalMoney());
-                });
-        if (ordersHashMap.isEmpty()) {
+        final List<Long> customerIds = orderRepository.findCustomerOrderHasLargestMoneyInLast24hour();
+        if (customerIds.isEmpty()) {
             return null;
         }
-
-        double greatestMoney = Double.MIN_VALUE;
-        Long customerId = (long) -1;
-        for (Map.Entry<Long, Double> entry : ordersHashMap.entrySet()) {
-            Long key = entry.getKey();
-            Double value = entry.getValue();
-            if (greatestMoney < value) {
-                greatestMoney = value;
-                customerId = key;
-            }
-        }
-        Customer customer = customerServiceImpl.getCustomerByIdOrFail(customerId);
+        final Customer customer = customerServiceImpl.getCustomerById(customerIds.get(0));
         return CustomerDetailsResponse.from(customer);
     }
 }

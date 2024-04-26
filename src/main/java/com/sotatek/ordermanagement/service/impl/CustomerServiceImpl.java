@@ -44,17 +44,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public CustomerDetailsResponse deleteCustomer(long customerId) {
-        final Customer customer = getCustomerByIdOrFail(customerId);
+        final Customer customer = getCustomerById(customerId);
         customerRepository.deleteById(customerId);
         return CustomerDetailsResponse.from(customer);
     }
 
-    public Customer getCustomerByIdOrFail(long customerId) {
-        final Customer customer = customerRepository.findById(customerId);
-        if (customer == null) {
-            throw new NotFoundException("Customer not found");
-        }
-        return customer;
+    public Customer getCustomerById(long customerId) {
+        return customerRepository.findById(customerId).orElseThrow(() -> new NotFoundException("Customer not found"));
     }
 
     public boolean isPhoneNumberExists(String phone) {
