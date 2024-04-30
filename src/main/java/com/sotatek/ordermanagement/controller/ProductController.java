@@ -35,6 +35,11 @@ public class ProductController {
         return productServiceImpl.getProducts(name, price, sortPriceType);
     }
 
+    @GetMapping("/{productId}")
+    public ProductDetailsResponse getProductDetails(@PathVariable("productId") long productId) {
+        return productServiceImpl.getProductDetailsById(productId);
+    }
+
     @PostMapping("create")
     @SecurityRequirement(name = "bearerAuth")
     @Secured({"ADMIN", "OPERATOR"})

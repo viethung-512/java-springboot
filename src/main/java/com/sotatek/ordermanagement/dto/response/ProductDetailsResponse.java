@@ -12,13 +12,4 @@ public class ProductDetailsResponse {
     String name;
     Double price;
     Long stockQuantity;
-
-    public static ProductDetailsResponse from(final Product product) {
-        return ProductDetailsResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .stockQuantity(product.getInventory().getStockQuantity())
-                .build();
-    }
 }

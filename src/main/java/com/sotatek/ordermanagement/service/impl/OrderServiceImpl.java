@@ -58,8 +58,7 @@ public class OrderServiceImpl implements OrderService {
                                                     createLineOrderRequest.getProductId());
                                     if (inventory.getStockQuantity()
                                             < createLineOrderRequest.getQuantity()) {
-                                        throw new ProductQuantityIsNotEnoughException(
-                                                inventory.getProduct().getName());
+                                        throw new ProductQuantityIsNotEnoughException(product.getName());
                                     }
                                     return createLineOrderRequest.getQuantity()
                                             * product.getPrice();

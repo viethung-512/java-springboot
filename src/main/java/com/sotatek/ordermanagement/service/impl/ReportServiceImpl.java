@@ -16,10 +16,11 @@ import org.springframework.stereotype.Service;
 public class ReportServiceImpl implements ReportService {
     private final InventoryServiceImpl inventoryServiceImpl;
     private final OrderServiceImpl orderServiceImpl;
+    private final ProductServiceImpl productServiceImpl;
 
     @Override
     public List<ProductDetailsResponse> getListProductQtyLessOrEqualThan3() {
-        return inventoryServiceImpl.getListProductQtyLessOrEqualThan3();
+        return productServiceImpl.getListProductQtyLessOrEqualThan3();
     }
 
     @Override

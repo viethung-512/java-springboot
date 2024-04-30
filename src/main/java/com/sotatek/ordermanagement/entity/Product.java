@@ -37,9 +37,6 @@ public class Product {
     @Column(name = "price")
     private Double price;
 
-    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
-    private Inventory inventory;
-
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<LineOrder> lineOrders;
 }

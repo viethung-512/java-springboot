@@ -13,6 +13,4 @@ public interface InventoryService {
     public InventoryDetailsResponse updateInventory(long productId, UpdateInventoryRequest request);
 
     public Inventory getInventoryByProductIdOrFailed(long productId);
-
-    public List<ProductDetailsResponse> getListProductQtyLessOrEqualThan3();
 }

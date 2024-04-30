@@ -44,12 +44,4 @@ public class InventoryServiceImpl implements InventoryService {
         }
         throw new NotFoundException("Product not found");
     }
-
-    public List<ProductDetailsResponse> getListProductQtyLessOrEqualThan3() {
-        final List<Inventory> inventories =
-                inventoryRepository.findAllByStockQuantityLessThanEqual(3);
-        return inventories.stream()
-                .map(it -> ProductDetailsResponse.from(it.getProduct()))
-                .toList();
-    }
 }

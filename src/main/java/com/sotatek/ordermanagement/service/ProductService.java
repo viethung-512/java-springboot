@@ -12,6 +12,8 @@ public interface ProductService {
     public List<ProductDetailsResponse> getProducts(
             String name, Double price, SortType sortPriceType);
 
+    public List<ProductDetailsResponse> getListProductQtyLessOrEqualThan3();
+
     public ProductDetailsResponse createProduct(CreateProductRequest request);
 
     public ProductDetailsResponse updateProduct(long productId, UpdateProductRequest request);

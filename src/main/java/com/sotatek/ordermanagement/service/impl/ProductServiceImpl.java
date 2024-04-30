@@ -5,6 +5,7 @@ import com.sotatek.ordermanagement.dto.request.CreateProductRequest;
 import com.sotatek.ordermanagement.dto.request.SortType;
 import com.sotatek.ordermanagement.dto.request.UpdateProductRequest;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
+import com.sotatek.ordermanagement.entity.Inventory;
 import com.sotatek.ordermanagement.entity.Product;
 import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.ProductNameExistsException;
@@ -23,23 +24,27 @@ public class ProductServiceImpl implements ProductService {
 
     public List<ProductDetailsResponse> getProducts(
             String name, Double price, SortType sortPriceType) {
-        List<Product> products = productRepository.findAllWithCondition(name, price);
+        List<ProductDetailsResponse> productsWithDetails = productRepository.findAllWithCondition(name, price);
 
         if (sortPriceType == SortType.DESC) {
 
-            products =
-                    products.stream()
+            productsWithDetails =
+                    productsWithDetails.stream()
                             .sorted((a, b) -> (int) (b.getPrice() - a.getPrice()))
                             .toList();
         } else if (sortPriceType == SortType.ASC) {
 
-            products =
-                    products.stream()
+            productsWithDetails =
+                    productsWithDetails.stream()
                             .sorted((a, b) -> (int) (a.getPrice() - b.getPrice()))
                             .toList();
         }
 
-        return products.stream().map(ProductDetailsResponse::from).toList();
+        return productsWithDetails;
+    }
+
+    public List<ProductDetailsResponse> getListProductQtyLessOrEqualThan3() {
+        return productRepository.findAllProductHasQtyLessThan(3);
     }
 
     @Transactional
@@ -50,25 +55,33 @@ public class ProductServiceImpl implements ProductService {
         final Product product =
                 Product.builder().name(request.getName()).price(request.getPrice()).build();
         final Product savedProduct = productRepository.save(product);
-        inventoryServiceImpl.initInventory(product.getId());
-        return ProductDetailsResponse.from(savedProduct);
+        inventoryServiceImpl.initInventory(savedProduct.getId());
+        return productRepository.findProductDetailsById(savedProduct.getId());
     }
 
     public ProductDetailsResponse updateProduct(long productId, UpdateProductRequest request) {
         final Product product = getProductById(productId);
         product.setPrice(request.getPrice());
         final Product savedProduct = productRepository.save(product);
-        return ProductDetailsResponse.from(savedProduct);
+        return productRepository.findProductDetailsById(savedProduct.getId());
     }
 
     public ProductDetailsResponse deleteProduct(long productId) {
-        final Product product = getProductById(productId);
+        final ProductDetailsResponse prDetails = getProductDetailsById(productId);
         productRepository.deleteById(productId);
-        return ProductDetailsResponse.from(product);
+        return prDetails;
     }
 
     public Product getProductById(long productId) {
         return productRepository.findById(productId).orElseThrow(() -> new NotFoundException("Product not found"));
+    }
+
+    public ProductDetailsResponse getProductDetailsById(long productId) {
+        final ProductDetailsResponse prDetails = productRepository.findProductDetailsById(productId);
+        if (prDetails == null) {
+            throw new NotFoundException("Product not found");
+        }
+        return prDetails;
     }
 
     public boolean isProductNameExists(String productName) {
