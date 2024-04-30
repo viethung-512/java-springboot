@@ -50,14 +50,6 @@ public class LineOrder {
             updatable = false)
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(
-            name = "product_id",
-            referencedColumnName = "id",
-            insertable = false,
-            updatable = false)
-    private Product product;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "order_id",
