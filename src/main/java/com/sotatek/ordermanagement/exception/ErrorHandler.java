@@ -28,10 +28,9 @@ public class ErrorHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFoundError(NotFoundException ex) {
-        ErrorCode error = ErrorCode.USER_NOT_FOUND;
+        ErrorCode error = ErrorCode.NOT_FOUND;
         return new ResponseEntity<>(
-                new ErrorResponse(error.getErrorCode(), error.getErrorMessage()),
-                HttpStatus.BAD_REQUEST);
+                new ErrorResponse(error.getErrorCode(), ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AuthenticationException.class)

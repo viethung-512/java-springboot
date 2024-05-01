@@ -8,7 +8,7 @@ public enum ErrorCode {
     AUTHENTICATION_ERROR("0", "Authentication Error!"),
     PASSWORD_NOT_MATCHED("1", "Password not matched!"),
     USERNAME_EXISTS("2", "Username already exists!"),
-    USER_NOT_FOUND("3", "User not found"),
+    NOT_FOUND("3", "Not found"),
     CUSTOMER_PHONE_EXISTS("4", "Customer phone already exists!"),
     PRODUCT_NAME_EXISTS("5", "Product name already exists!"),
     PRODUCT_QUANTITY_IS_NOT_ENOUGH("6", "Product quantity is not enough!"),
