@@ -34,6 +34,13 @@ public class CustomerController {
         return customerServiceImpl.getCustomerWithConditions(name, phone, address);
     }
 
+    @GetMapping("/{customerId}")
+    @Secured({"ADMIN", "OPERATOR"})
+    public CustomerDetailsResponse getCustomerDetailsById(
+            @PathVariable("customerId") long customerId) {
+        return customerServiceImpl.getCustomerDetailsById(customerId);
+    }
+
     @PostMapping("create")
     @Secured({"ADMIN", "OPERATOR"})
     public CustomerDetailsResponse createCustomer(

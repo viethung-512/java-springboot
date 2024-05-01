@@ -11,7 +11,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.DecodingException;
 import io.jsonwebtoken.security.SignatureException;
-
 import java.security.Key;
 import java.time.ZonedDateTime;
 import java.util.Base64;
@@ -34,9 +33,12 @@ public class JwtUtil {
             Map.ofEntries(Map.entry("typ", "JWT"), Map.entry("alg", "HS512"));
 
     private static Key JWT_SECRET;
+
     JwtUtil(@Value("${jwt.secretKey}") final String secretKey) {
-        JwtUtil.JWT_SECRET = new SecretKeySpec(Base64.getDecoder().decode(secretKey),
-                SignatureAlgorithm.HS512.getJcaName());
+        JwtUtil.JWT_SECRET =
+                new SecretKeySpec(
+                        Base64.getDecoder().decode(secretKey),
+                        SignatureAlgorithm.HS512.getJcaName());
     }
 
     @NonNull

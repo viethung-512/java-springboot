@@ -3,10 +3,15 @@ package com.sotatek.ordermanagement.service.impl;
 
 import com.sotatek.ordermanagement.dto.request.CreateCustomerRequest;
 import com.sotatek.ordermanagement.dto.response.CustomerDetailsResponse;
+import com.sotatek.ordermanagement.dto.response.OrderDetailsResponse;
 import com.sotatek.ordermanagement.entity.Customer;
+import com.sotatek.ordermanagement.entity.LineOrder;
+import com.sotatek.ordermanagement.entity.Order;
 import com.sotatek.ordermanagement.exception.CustomerPhoneExistsException;
 import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.repository.CustomerRepository;
+import com.sotatek.ordermanagement.repository.LineOrderRepository;
+import com.sotatek.ordermanagement.repository.OrderRepository;
 import com.sotatek.ordermanagement.service.CustomerService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +21,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
+    private final OrderRepository orderRepository;
+    private final LineOrderRepository lineOrderRepository;
 
     public List<CustomerDetailsResponse> getCustomers() {
         List<Customer> customers = customerRepository.findAll();
@@ -50,7 +57,25 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public Customer getCustomerById(long customerId) {
-        return customerRepository.findById(customerId).orElseThrow(() -> new NotFoundException("Customer not found"));
+        return customerRepository
+                .findById(customerId)
+                .orElseThrow(() -> new NotFoundException("Customer not found"));
+    }
+
+    public CustomerDetailsResponse getCustomerDetailsById(long customerId) {
+        final Customer customer = getCustomerById(customerId);
+        final List<Order> orders = orderRepository.findAllByCustomerId(customerId);
+        final List<OrderDetailsResponse> orderDetailsResponses =
+                orders.stream()
+                        .map(
+                                order -> {
+                                    final List<LineOrder> lineOrders =
+                                            lineOrderRepository.findAllByOrderId(order.getId());
+                                    return OrderDetailsResponse.from(order, lineOrders);
+                                })
+                        .toList();
+
+        return CustomerDetailsResponse.from(customer, orderDetailsResponses);
     }
 
     public boolean isPhoneNumberExists(String phone) {

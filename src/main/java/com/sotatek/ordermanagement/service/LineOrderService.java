@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface LineOrderService {
     public List<LineOrder> savedLineOrders(List<LineOrder> lineOrders);
+
+    public List<LineOrder> getLineOrdersByOrderId(long orderId);
 }

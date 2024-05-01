@@ -11,21 +11,14 @@ import com.sotatek.ordermanagement.entity.Inventory;
 import com.sotatek.ordermanagement.entity.LineOrder;
 import com.sotatek.ordermanagement.entity.Order;
 import com.sotatek.ordermanagement.entity.Product;
-import com.sotatek.ordermanagement.exception.DateStringIsNotCorrectException;
 import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.ProductQuantityIsNotEnoughException;
 import com.sotatek.ordermanagement.repository.OrderRepository;
 import com.sotatek.ordermanagement.service.OrderService;
-
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,8 +35,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     public OrderDetailsResponse createOrder(CreateOrderRequest request) {
-        final Customer customer =
-                customerServiceImpl.getCustomerById(request.getCustomerId());
+        final Customer customer = customerServiceImpl.getCustomerById(request.getCustomerId());
 
         // Validate product & quantity & calculate totalMoney
         Double totalMoney =
@@ -58,7 +50,8 @@ public class OrderServiceImpl implements OrderService {
                                                     createLineOrderRequest.getProductId());
                                     if (inventory.getStockQuantity()
                                             < createLineOrderRequest.getQuantity()) {
-                                        throw new ProductQuantityIsNotEnoughException(product.getName());
+                                        throw new ProductQuantityIsNotEnoughException(
+                                                product.getName());
                                     }
                                     return createLineOrderRequest.getQuantity()
                                             * product.getPrice();
@@ -85,8 +78,6 @@ public class OrderServiceImpl implements OrderService {
             lineOrders.add(build);
         }
         final List<LineOrder> savedLineOrders = lineOrderServiceImpl.savedLineOrders(lineOrders);
-        savedOrder.setLineOrders(savedLineOrders);
-        savedOrder = orderRepository.save(savedOrder);
         savedLineOrders.forEach(
                 lineOrder -> {
                     final Inventory inventory =
@@ -100,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
                                     .build());
                 });
 
-        return OrderDetailsResponse.from(getOrderById(savedOrder.getId()));
+        return getOrderDetailsById(order.getId());
     }
 
     public Double getTotalRevenue(LocalDateTime from, LocalDateTime to) {
@@ -108,11 +99,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order getOrderById(long orderId) {
-        return orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found"));
+        return orderRepository
+                .findById(orderId)
+                .orElseThrow(() -> new NotFoundException("Order not found"));
+    }
+
+    public OrderDetailsResponse getOrderDetailsById(long orderId) {
+        final Order order = getOrderById(orderId);
+        final List<LineOrder> lineOrders = lineOrderServiceImpl.getLineOrdersByOrderId(orderId);
+        return OrderDetailsResponse.from(order, lineOrders);
     }
 
     public CustomerDetailsResponse getMostPotentialCustomer() {
-        final List<Long> customerIds = orderRepository.findCustomerOrderHasLargestMoneyInLast24hour();
+        final List<Long> customerIds =
+                orderRepository.findCustomerOrderHasLargestMoneyInLast24hour();
         if (customerIds.isEmpty()) {
             return null;
         }

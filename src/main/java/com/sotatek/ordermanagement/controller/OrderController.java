@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,5 +26,11 @@ public class OrderController {
     @Secured({"ADMIN", "OPERATOR"})
     public OrderDetailsResponse createOrder(@Valid @RequestBody CreateOrderRequest request) {
         return orderServiceImpl.createOrder(request);
+    }
+
+    @GetMapping("/{orderId}")
+    @Secured({"ADMIN", "OPERATOR"})
+    public OrderDetailsResponse getOrderDetails(@PathVariable("orderId") long orderId) {
+        return orderServiceImpl.getOrderDetailsById(orderId);
     }
 }

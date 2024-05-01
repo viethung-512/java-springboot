@@ -5,7 +5,6 @@ import com.sotatek.ordermanagement.dto.request.CreateProductRequest;
 import com.sotatek.ordermanagement.dto.request.SortType;
 import com.sotatek.ordermanagement.dto.request.UpdateProductRequest;
 import com.sotatek.ordermanagement.dto.response.ProductDetailsResponse;
-import com.sotatek.ordermanagement.entity.Inventory;
 import com.sotatek.ordermanagement.entity.Product;
 import com.sotatek.ordermanagement.exception.NotFoundException;
 import com.sotatek.ordermanagement.exception.ProductNameExistsException;
@@ -24,7 +23,8 @@ public class ProductServiceImpl implements ProductService {
 
     public List<ProductDetailsResponse> getProducts(
             String name, Double price, SortType sortPriceType) {
-        List<ProductDetailsResponse> productsWithDetails = productRepository.findAllWithCondition(name, price);
+        List<ProductDetailsResponse> productsWithDetails =
+                productRepository.findAllWithCondition(name, price);
 
         if (sortPriceType == SortType.DESC) {
 
@@ -73,11 +73,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Product getProductById(long productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new NotFoundException("Product not found"));
+        return productRepository
+                .findById(productId)
+                .orElseThrow(() -> new NotFoundException("Product not found"));
     }
 
     public ProductDetailsResponse getProductDetailsById(long productId) {
-        final ProductDetailsResponse prDetails = productRepository.findProductDetailsById(productId);
+        final ProductDetailsResponse prDetails =
+                productRepository.findProductDetailsById(productId);
         if (prDetails == null) {
             throw new NotFoundException("Product not found");
         }
